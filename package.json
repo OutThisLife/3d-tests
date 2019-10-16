@@ -1,0 +1,30 @@
+{
+  "name": "3d-tests",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next",
+    "build": "next build"
+  },
+  "dependencies": {
+    "next": "^9.1.1",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "react-three-fiber": "^3.0.2",
+    "styled-components": "^4.4.0",
+    "three": "^0.109.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.11.1",
+    "@types/react": "^16.9.7",
+    "@types/three": "^0.103.2",
+    "typescript": "^3.6.4"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
