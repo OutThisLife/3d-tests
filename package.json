@@ -5,7 +5,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "next",
-    "build": "next build"
+    "start": "serve out",
+    "build": "next build",
+    "deploy": "now"
   },
   "dependencies": {
     "next": "^9.1.1",
