@@ -1,13 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import {
-  Canvas,
-  extend,
-  PointerEvent,
-  useRender,
-  useResource,
-  useThree
-} from 'react-three-fiber'
-import { Mesh, MeshNormalMaterial } from 'three'
+import { Canvas, extend, useRender, useThree } from 'react-three-fiber'
+import { ThemeProvider } from 'styled-components'
+
+import Stars from '../components/Stars'
+import { theme } from './_style'
 
 export default () => {
   const [ready, set] = useState(false)
@@ -17,11 +13,7 @@ export default () => {
       'three/examples/jsm/controls/OrbitControls'
     )
 
-    const { TransformControls } = await import(
-      'three/examples/jsm/controls/TransformControls'
-    )
-
-    extend({ OrbitControls, TransformControls })
+    extend({ OrbitControls })
     set(true)
   }, [])
 
@@ -32,64 +24,29 @@ export default () => {
   }, [ready])
 
   return (
-    <>
-      {ready && (
-        <Canvas style={{ width: '100vw', height: '100vh' }}>
+    ready && (
+      <Canvas style={{ width: '100vw', height: '100vh' }}>
+        <ThemeProvider {...{ theme }}>
           <Main />
-        </Canvas>
-      )}
-
-      <style jsx global>{`
-        * {
-          box-sizing: border-box;
-          margin: 0;
-        }
-
-        html {
-          background: #0000ee;
-        }
-      `}</style>
-    </>
+        </ThemeProvider>
+      </Canvas>
+    )
   )
 }
 
 const Main = () => {
   const orbit = useRef<any>()
-  const transform = useRef<any>()
-  const [ref, mesh] = useResource()
   const { camera, gl } = useThree()
-
-  const handleDrag = useCallback(
-    ({ value }) => (orbit.current.enabled = !value),
-    []
-  )
-
-  const onPointerDown = useCallback(
-    (e: PointerEvent) =>
-      e.object instanceof Mesh &&
-      e.object.material instanceof MeshNormalMaterial &&
-      (e.object.material.wireframe = !e.object.material.wireframe),
-    []
-  )
 
   useRender(() => orbit.current && orbit.current.update(), false)
 
-  useEffect(() => {
-    if (transform.current) {
-      transform.current.addEventListener('dragging-changed', handleDrag)
-    }
-
-    return () =>
-      transform.current &&
-      transform.current.removeEventListener('dragging-changed', handleDrag)
-  }, [])
-
   return (
     <>
-      <mesh {...{ ref, onPointerDown }}>
-        <dodecahedronGeometry attach="geometry" />
-        <meshNormalMaterial attach="material" />
-      </mesh>
+      <Stars />
+
+      <perspectiveCamera
+        args={[75, window.innerWidth / window.innerHeight, 0.1, 50]}
+      />
 
       <orbitControls
         ref={orbit}
@@ -97,14 +54,6 @@ const Main = () => {
         enableDamping
         dampingFactor={0.1}
       />
-
-      {mesh && (
-        <transformControls
-          ref={transform}
-          args={[camera, gl.domElement]}
-          onUpdate={e => e.attach(mesh)}
-        />
-      )}
     </>
   )
 }
