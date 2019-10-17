@@ -15,7 +15,7 @@ export default () => (
       blending={THREE.AdditiveBlending}
     />
 
-    <pointLight args={[0xffffff, 2, 0]} position={[0, 0, 0]} />
+    <Light />
   </>
 )
 
@@ -47,9 +47,28 @@ const WM = ({ reverse = false, ...props }) => {
       <meshLambertMaterial
         attach="material"
         side={THREE.DoubleSide}
-        overdraw={0.5}
         {...props}
       />
     </mesh>
+  )
+}
+
+const Light = () => {
+  const ref = useRef<any>()
+  const { mouse } = useThree()
+
+  useFrame(() => {
+    if (!ref.current) {
+      return
+    }
+
+    ref.current.position.y = mouse.x
+    ref.current.position.x = mouse.y
+    ref.current.position.z =
+      ((mouse.x + mouse.y) / (window.innerWidth + window.innerHeight)) * -1
+  })
+
+  return (
+    <pointLight {...{ ref }} args={[0xffffff, 2, 0]} position={[0, 0, 0]} />
   )
 }
