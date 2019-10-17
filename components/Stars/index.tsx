@@ -5,23 +5,37 @@ import * as THREE from 'three'
 export default () => (
   <>
     <WM
-      color={new THREE.Color('#070707')}
-      emissive={new THREE.Color('#070707')}
+      speed={0.001}
+      geo={{
+        args: [0.8, 0.8, 50, 32, 32, true]
+      }}
+      mat={{
+        color: new THREE.Color('#E4E2BF'),
+        emissive: new THREE.Color('#10100E'),
+        side: THREE.BackSide
+      }}
     />
 
     <WM
-      color={new THREE.Color('#E4E2BF')}
-      emissive={new THREE.Color('#10100E')}
-      blending={THREE.AdditiveBlending}
+      speed={0.01}
+      geo={{
+        args: [0.8, 0.8, 50, 32, 32, true]
+      }}
+      mat={{
+        color: new THREE.Color('#070707'),
+        emissive: new THREE.Color('#070707'),
+        blending: THREE.AdditiveBlending,
+        side: THREE.DoubleSide
+      }}
     />
 
     <Light />
   </>
 )
 
-const WM = ({ reverse = false, ...props }) => {
+const WM = ({ geo = {}, mat, speed }) => {
   const ref = useRef<any>()
-  const { camera } = useThree()
+  const { camera, clock } = useThree()
 
   useFrame(() => {
     if (!ref.current) {
@@ -32,43 +46,22 @@ const WM = ({ reverse = false, ...props }) => {
     ref.current.position.y = camera.position.y
     ref.current.position.z = camera.position.z
 
-    ref.current.rotation.y += 0.0012
+    ref.current.rotation.y +=
+      Math.sin((2e5 * clock.getDelta()) % Math.PI) * speed
   })
 
-  const rotation = useMemo(() => new THREE.Euler(1.5, 0, 0), [])
-
   return (
-    <mesh {...{ ref, rotation }}>
-      <cylinderGeometry
-        attach="geometry"
-        args={[0.8, 0.8, 100, 32, 32, true]}
-      />
-
-      <meshLambertMaterial
-        attach="material"
-        side={THREE.DoubleSide}
-        {...props}
-      />
+    <mesh {...{ ref }} rotation-x={1.5} rotation-y={0.1}>
+      <cylinderGeometry attach="geometry" {...geo} />
+      <meshLambertMaterial attach="material" {...mat} />
     </mesh>
   )
 }
 
 const Light = () => {
   const ref = useRef<any>()
-  const { mouse } = useThree()
-
-  useFrame(() => {
-    if (!ref.current) {
-      return
-    }
-
-    ref.current.position.y = mouse.x
-    ref.current.position.x = mouse.y
-    ref.current.position.z =
-      ((mouse.x + mouse.y) / (window.innerWidth + window.innerHeight)) * -1
-  })
 
   return (
-    <pointLight {...{ ref }} args={[0xffffff, 2, 0]} position={[0, 0, 0]} />
+    <pointLight {...{ ref }} args={[0xffffff, 2.2, 10]} position={[0, 0, 0]} />
   )
 }

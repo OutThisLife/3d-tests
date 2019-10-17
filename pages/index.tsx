@@ -44,10 +44,6 @@ const Main = () => {
     <>
       <Stars />
 
-      <perspectiveCamera
-        args={[75, window.innerWidth / window.innerHeight, 0.1, 50]}
-      />
-
       <orbitControls
         ref={orbit}
         args={[camera, gl.domElement]}
