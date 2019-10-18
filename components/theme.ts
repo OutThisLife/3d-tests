@@ -1,4 +1,4 @@
 export default {
-  bg: '#060605',
-  fg: '#fff'
+  bg: '#000',
+  fg: '#00C531'
 }

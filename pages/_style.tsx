@@ -13,6 +13,7 @@ html, body {
 }
 
 body {
+  cursor: none;
   background: ${key('bg')}
 }
 `
