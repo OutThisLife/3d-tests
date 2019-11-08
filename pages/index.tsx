@@ -26,6 +26,7 @@ const Main = () => {
           key={i}
           ref={r => obstacles.current.push(r)}
           position-x={1.15 * (7 - i)}
+          position-y={-(height / 2) * Math.random()}
           scale-y={1 * Math.random()}>
           <mesh>
             <boxGeometry
@@ -61,7 +62,7 @@ const Main = () => {
           o.scale.y = 1 * Math.random()
 
           o.children.forEach(c => {
-            c.position.y = 0
+            c.position.y = -(height / 2) * Math.random()
             c.material.wireframe = true
             c.material.color = new THREE.Color(theme.fg)
           })
@@ -86,7 +87,7 @@ const Main = () => {
 
         o.animation = anime({
           targets: o,
-          positionY: [0, 10],
+          positionY: [o.position.y, 10],
           begin: () => {
             o.material.wireframe = false
             o.material.color = new THREE.Color(0xf00000)
