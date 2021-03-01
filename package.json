@@ -18,7 +18,7 @@
     "react-three-fiber": "^3.0.2",
     "styled-components": "^4.4.0",
     "styled-theme": "^0.3.3",
-    "three": "^0.109.0"
+    "three": "^0.125.0"
   },
   "devDependencies": {
     "@types/animejs": "^3.1.0",
